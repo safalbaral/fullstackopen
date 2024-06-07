@@ -15,7 +15,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newQuery, setNewQuery] = useState('')
   const [queryResults, setQueryResults] = useState([])
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState({
+    message: null,
+    success: true
+  })
 
   useEffect(() => {
     entries
@@ -25,12 +28,15 @@ const App = () => {
     })
   }, [])
 
-  const displayNotification = (message) => {
-    setMessage(message)
-    console.log('Set message to', message)
+  const displayNotification = (message, success=true) => {
+    const messageObject = {message, success}
+    setMessage(messageObject)
     setTimeout(() => {
       console.log('Set message to null', )
-      setMessage(null)
+      setMessage({
+        message: null,
+        success: true
+      })
     }, 5000)
   }
 
@@ -93,13 +99,16 @@ const App = () => {
         alert('Entry deleted');
         setPersons(persons.filter(person => person.id !== id))
       })
+      .catch(error => {
+        alert(`Error: Entry might already be deleted from the server.`)
+      })
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification messageObject={message} />
       <Filter queryValue={newQuery} queryHandler={handleNewQuery} />
       <h3>Add a new</h3>
       <PersonForm submitHandler={addEntry} nameValue={newName} nameHandler={handleNameChange} numberValue={newNumber} numberHandler={handleNumberChange} />
