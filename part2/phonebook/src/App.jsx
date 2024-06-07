@@ -3,7 +3,7 @@ import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
 
-import axios from 'axios';
+import entries from './services/entries';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -14,11 +14,10 @@ const App = () => {
   const [queryResults, setQueryResults] = useState([])
 
   useEffect(() => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('Response & data', response, response.data)
-      setPersons(response.data)
+    entries
+    .getAll()
+    .then(allEntries => {
+      setPersons(allEntries)
     })
   }, [])
 
@@ -34,11 +33,10 @@ const App = () => {
         number: newNumber,
         id: persons.length + 1
       }
-      axios
-      .post('http://localhost:3001/persons', entryObject)
-      .then(response => {
-        console.log('POST response', response)
-        setPersons(persons.concat(response.data))
+      entries
+      .create(entryObject)
+      .then(newEntry => {
+        setPersons(persons.concat(newEntry))
       })
       setNewName('')
       setNewNumber('')
@@ -61,6 +59,17 @@ const App = () => {
     setQueryResults(syncedQuery === '' ? persons : persons.filter(person => person.name.toLowerCase().startsWith(syncedQuery.toLowerCase())))
   }
 
+  const deleteHandler = (id) => {
+    const entryToDelete = persons.find(person => person.id === id).name
+    if (window.confirm(`Do you want to delete ${entryToDelete}? `)) {
+      entries.deleteEntry(id)
+      .then(deletedEntry => {
+        alert('Entry deleted');
+        setPersons(persons.filter(person => person.id !== id))
+      })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -68,7 +77,7 @@ const App = () => {
       <h3>Add a new</h3>
       <PersonForm submitHandler={addEntry} nameValue={newName} nameHandler={handleNameChange} numberValue={newNumber} numberHandler={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} newQuery={newQuery} queryResults={queryResults} />
+      <Persons persons={persons} newQuery={newQuery} queryResults={queryResults} deleteHandler={deleteHandler} />
     </div>
   )
 }
