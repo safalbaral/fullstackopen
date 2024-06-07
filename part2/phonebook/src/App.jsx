@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
+import Notification from './components/Notification';
 
 import entries from './services/entries';
+
+import './index.css';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,6 +15,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newQuery, setNewQuery] = useState('')
   const [queryResults, setQueryResults] = useState([])
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     entries
@@ -20,6 +24,15 @@ const App = () => {
       setPersons(allEntries)
     })
   }, [])
+
+  const displayNotification = (message) => {
+    setMessage(message)
+    console.log('Set message to', message)
+    setTimeout(() => {
+      console.log('Set message to null', )
+      setMessage(null)
+    }, 5000)
+  }
 
   const addEntry = (event) => {
     event.preventDefault();
@@ -36,14 +49,14 @@ const App = () => {
         })
         setNewName('')
         setNewNumber('')
+        displayNotification('Updated entry successfully')
       }
     }
     else 
     {
       const entryObject = {
         name: newName, 
-        number: newNumber,
-        id: persons.length + 1
+        number: newNumber
       }
       entries
       .create(entryObject)
@@ -52,6 +65,7 @@ const App = () => {
       })
       setNewName('')
       setNewNumber('')
+      displayNotification('Added entry successfully')
     }
   }
 
@@ -85,6 +99,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter queryValue={newQuery} queryHandler={handleNewQuery} />
       <h3>Add a new</h3>
       <PersonForm submitHandler={addEntry} nameValue={newName} nameHandler={handleNameChange} numberValue={newNumber} numberHandler={handleNumberChange} />
