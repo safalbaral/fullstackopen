@@ -24,7 +24,19 @@ const App = () => {
   const addEntry = (event) => {
     event.preventDefault();
     if (retrieveEntry(newName) !== undefined) {
-      alert(`${newName} is already added to the phonebook`)
+      if (window.confirm(`${newName} is already added to the phonebook, do you want to update the old entry?`)) {
+        const entryObject = {
+          ...persons.find(person => person.name === newName), 
+          number: newNumber
+        }
+        entries
+        .update(entryObject.id, entryObject)
+        .then(updatedEntry => {
+          setPersons(persons.map(person => person.id === updatedEntry.id ? updatedEntry : person))
+        })
+        setNewName('')
+        setNewNumber('')
+      }
     }
     else 
     {
