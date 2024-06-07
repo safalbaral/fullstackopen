@@ -97,7 +97,7 @@ const App = () => {
       entries.deleteEntry(id)
       .then(deletedEntry => {
         alert('Entry deleted');
-        setPersons(persons.filter(person => person.id !== id))
+        setPersons(persons.filter(person => person.id !== deletedEntry.id))
       })
       .catch(error => {
         alert(`Error: Entry might already be deleted from the server.`)
