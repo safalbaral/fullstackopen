@@ -1,0 +1,3 @@
+[submodule "fullstackopen-part3"]
+	path = fullstackopen-part3
+	url = git@github.com:safalbaral/fullstackopen-part3.git
