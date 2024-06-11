@@ -95,9 +95,9 @@ const App = () => {
     const entryToDelete = persons.find(person => person.id === id).name
     if (window.confirm(`Do you want to delete ${entryToDelete}? `)) {
       entries.deleteEntry(id)
-      .then(deletedEntry => {
+      .then(response => {
         alert('Entry deleted');
-        setPersons(persons.filter(person => person.id !== deletedEntry.id))
+        setPersons(persons.filter(person => person.id !== id))
       })
       .catch(error => {
         alert(`Error: Entry might already be deleted from the server.`)
