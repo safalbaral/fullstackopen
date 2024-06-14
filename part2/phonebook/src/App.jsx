@@ -53,6 +53,9 @@ const App = () => {
         .then(updatedEntry => {
           setPersons(persons.map(person => person.id === updatedEntry.id ? updatedEntry : person))
         })
+        .catch(error => {
+          displayNotification(error.response.data.error, false)
+        })
         setNewName('')
         setNewNumber('')
         displayNotification('Updated entry successfully')
@@ -68,6 +71,9 @@ const App = () => {
       .create(entryObject)
       .then(newEntry => {
         setPersons(persons.concat(newEntry))
+      })
+      .catch(error => {
+        displayNotification(error.response.data.error, false)
       })
       setNewName('')
       setNewNumber('')
