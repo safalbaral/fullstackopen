@@ -6,7 +6,6 @@ const totalLikes = (blogs) => {
   const sum = blogs.reduce((total, blog) => {
     return total + blog.likes
   }, 0)
-  console.log('HERED IST THE SUM', sum)
   return sum
 }
 
