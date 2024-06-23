@@ -48,7 +48,11 @@ test('a valid blog entry can be added', async () => {
                               .expect('Content-Type', /application\/json/)
 
     const newBlogLength = await api.get('/api/blogs').expect('Content-Type', /application\/json/)
-    assert.strictEqual(originalBlogLength + 1, newBlogLength.body.length)
+    assert.strictEqual(newBlogLength.body.length, originalBlogLength + 1)
+    
+    delete response.body.id // Delete for comparison
+
+    assert.equal(JSON.stringify(response.body), JSON.stringify(newBlog)) // Compares by value for the entry saved in database and entry sent
 })
 
 after(async () => {
