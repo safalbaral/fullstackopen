@@ -44,6 +44,21 @@ describe('Tests related to deleting and updating a blog entry', async() => {
     const ids = currentBlogs.map(r => r.id)
     assert(!ids.includes(blogToDelete.ids))
   })
+
+  test('can update blog entry', async() => {
+    const initialBlogs = await helper.blogsInDb()
+    const blogToUpdate = initialBlogs[0]
+
+    const updatedBlogToSend = { ...blogToUpdate, likes:2000 }
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(updatedBlogToSend)
+
+    const updatedBlogList = await helper.blogsInDb()
+    const updatedLikes = updatedBlogList.filter(blog => blog.id === blogToUpdate.id)[0].likes
+
+    assert.strictEqual(updatedLikes, 2000)
+
+  })
 })
 
 describe('Tests related to creating a new blog entry', async () => {
