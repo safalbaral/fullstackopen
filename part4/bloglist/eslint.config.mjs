@@ -1,5 +1,5 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
+import globals from 'globals'
+import pluginJs from '@eslint/js'
 import stylisticJs from '@stylistic/eslint-plugin-js'
 
 export default [
@@ -32,7 +32,7 @@ export default [
       ]
     }
   },
-  {files: ["**/*.js"], languageOptions: {sourceType: "commonjs"}},
-  {languageOptions: { globals: globals.node }},
+  { files: ['**/*.js'], languageOptions: { sourceType: 'commonjs' } },
+  { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
-];
+]
