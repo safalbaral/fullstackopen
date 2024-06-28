@@ -5,7 +5,10 @@ import App from './App'
 import reducer from './reducers/anecdoteReducer'
 
 const store = createStore(reducer)
-
+store.subscribe(() => {
+  const storeNow = store.getState()
+  console.log('STORE NOW', storeNow, typeof(storeNow))
+})
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
