@@ -1,3 +1,5 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -17,43 +19,28 @@ const asObject = (anecdote) => {
   }
 }
 
-const sortByVotes = (state) => {
-  return state.sort((a, b) => b.votes - a.votes)
-}
-
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (state = initialState, action) => {
-  switch (action.type){
-    case 'VOTE':
-      return sortByVotes(state.map(anecdote => anecdote.id !== action.payload.id ? anecdote : {...anecdote, votes: anecdote.votes + 1}))
-    case 'NEW_ANECDOTE':
-      return sortByVotes(state.concat(asObject(action.payload.content)))
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createAnecdote(state, action) {
+      const content = action.payload
+      state.push(asObject(content))
+  },
+  vote(state, action) {
+    const id = action.payload  
+    return state.map(anecdote => anecdote.id !== id ? anecdote : {...anecdote, votes: anecdote.votes + 1})
   }
-  console.log('state now: ', state)
-  console.log('action', action)
+}
+})
 
-  return state
+export const sortByVotes = (state) => {
+  console.log('STATE', state)
+  return [...state].sort((a, b) => b.votes - a.votes) // A copy of state is created using [...state] because state is read only - meant to be immutable
 }
 
-export const vote = (id) => {
-  return(
-    {
-      type: "VOTE",
-      payload: { id }
-    }
-  )
-}
+export const { createAnecdote, vote } = anecdoteSlice.actions
 
-export const createAnecdote = (content) => {
-  return(
-    {
-      type: 'NEW_ANECDOTE',
-      payload: {
-        content: content
-      }
-    }
-  )
-}
-
-export default anecdoteReducer
+export default anecdoteSlice.reducer
