@@ -4,7 +4,6 @@ import { sortByVotes } from '../reducers/anecdoteReducer'
 import { sendNotification, removeNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
-
     const anecdotes = useSelector(state => state.filter === '' ? 
                                                                 sortByVotes(state.anecdotes)
                                                                :sortByVotes(state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter))))
